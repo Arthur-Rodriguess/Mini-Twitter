@@ -4,12 +4,9 @@ namespace MiniTwitter\Controllers;
 
 use MiniTwitter\Core\Response;
 use MiniTwitter\Services\PostService;
-use MiniTwitter\Traits\HandlesExceptions;
 
 class PostController
 {
-    use HandlesExceptions;
-
     private PostService $postService;
     private ?int $currentUserId;
 

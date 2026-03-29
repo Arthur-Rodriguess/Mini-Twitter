@@ -4,12 +4,9 @@ namespace MiniTwitter\Controllers;
 
 use MiniTwitter\Core\Response;
 use MiniTwitter\Services\LikeService;
-use MiniTwitter\Traits\HandlesExceptions;
 
 class LikeController
 {
-    use HandlesExceptions;
-    
     private LikeService $likeService;
     private ?int $currentUserId;
 

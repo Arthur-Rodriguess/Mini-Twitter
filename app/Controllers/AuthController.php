@@ -2,15 +2,11 @@
 
 namespace MiniTwitter\Controllers;
 
-use Exception;
 use MiniTwitter\Core\Response;
 use MiniTwitter\Services\AuthService;
-use MiniTwitter\Traits\HandlesExceptions;
 
 class AuthController
 {
-    use HandlesExceptions;
-
     private AuthService $authService;
 
     public function __construct()
