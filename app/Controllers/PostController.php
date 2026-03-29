@@ -2,7 +2,6 @@
 
 namespace MiniTwitter\Controllers;
 
-use Exception;
 use MiniTwitter\Core\Response;
 use MiniTwitter\Services\PostService;
 use MiniTwitter\Traits\HandlesExceptions;
@@ -24,63 +23,43 @@ class PostController
     // GET: /posts
     public function index(): void
     {
-        try {
-            $posts = $this->postService->getTimeLine($this->currentUserId);
-            Response::json($posts);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        $posts = $this->postService->getTimeLine($this->currentUserId);
+        Response::json($posts);
     }
 
     // Busca um único post
     // GET: /posts/{id}
     public function show(int $id): void
     {
-        try {
-            $post = $this->postService->getOnePost($id, $this->currentUserId);
-            Response::json($post);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        $post = $this->postService->getOnePost($id, $this->currentUserId);
+        Response::json($post);
     }
 
     // Cria uma postagem
     // POST: /posts
     public function store(): void
     {
-        try {
-            $data = json_decode(file_get_contents("php://input"), true) ?? [];
-            $this->postService->createNewPost($data, $this->currentUserId);
+        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+        $this->postService->createNewPost($data, $this->currentUserId);
 
-            Response::json(["success" => "Postagem criada com sucesso"], 201);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        Response::json(["success" => "Postagem criada com sucesso"], 201);
     }
 
     // Exclui uma postagem
     // DELETE: /posts/{id}
     public function destroy(int $id): void
     {
-        try {
-            $this->postService->deletePost($id, $this->currentUserId);
-            Response::json(["success" => "Postagem deletada com sucesso"]);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        $this->postService->deletePost($id, $this->currentUserId);
+        Response::json(["success" => "Postagem deletada com sucesso"]);
     }
 
     // Atualiza uma postagem
     // PATCH: /posts/{id}
     public function update(int $id): void
     {
-        try {
-            $data = json_decode(file_get_contents("php://input"), true) ?? [];
-            $this->postService->updatePost($id, $data, $this->currentUserId);
+        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+        $this->postService->updatePost($id, $data, $this->currentUserId);
 
-            Response::json(["success" => "Postagem atualizada com sucesso"]);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        Response::json(["success" => "Postagem atualizada com sucesso"]);
     }
 }

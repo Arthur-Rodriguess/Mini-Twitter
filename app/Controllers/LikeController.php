@@ -2,7 +2,6 @@
 
 namespace MiniTwitter\Controllers;
 
-use Exception;
 use MiniTwitter\Core\Response;
 use MiniTwitter\Services\LikeService;
 use MiniTwitter\Traits\HandlesExceptions;
@@ -22,11 +21,7 @@ class LikeController
 
     public function like(int $id): void
     {
-        try {
-            $this->likeService->likePost($id, $this->currentUserId);
-            Response::json(["success" => "Postagem curtida com sucesso"]);
-        } catch (Exception $e) {
-            $this->handleException($e);
-        }
+        $this->likeService->likePost($id, $this->currentUserId);
+        Response::json(["success" => "Postagem curtida com sucesso"]);
     }
 }

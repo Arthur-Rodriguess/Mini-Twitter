@@ -20,32 +20,24 @@ class AuthController
 
     public function register()
     {
-        try {
-            $data = json_decode(file_get_contents("php://input"), true) ?? [];
-            $this->authService->register($data);
+        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+        $this->authService->register($data);
 
-            Response::json(["success" => "Usuário registrado com sucesso"], 201);
-        } catch(Exception $e) {
-            $this->handleException($e);
-        }
+        Response::json(["success" => "Usuário registrado com sucesso"], 201);
     }
 
     public function login()
     {
-        try {
-            $data = json_decode(file_get_contents("php://input"), true) ?? [];
-            $user = $this->authService->login($data);
+        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+        $user = $this->authService->login($data);
 
-            $_SESSION['user'] = (object) [
-                "id" => $user->getId(),
-                "username" => $user->username,
-                "bio" => $user->bio
-            ];
+        $_SESSION['user'] = (object) [
+            "id" => $user->getId(),
+            "username" => $user->username,
+            "bio" => $user->bio
+        ];
             
-            Response::json(["success" => "Usuário logado com sucesso"]);            
-        } catch(Exception $e) {
-            $this->handleException($e);
-        }
+        Response::json(["success" => "Usuário logado com sucesso"]);
     }
 
     public function logout()
