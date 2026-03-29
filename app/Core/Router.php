@@ -2,8 +2,6 @@
 
 namespace MiniTwitter\Core;
 
-use MiniTwitter\Middlewares\AuthMiddleware;
-
 class Router
 {
     private $routes = [];
