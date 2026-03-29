@@ -3,7 +3,6 @@
 namespace MiniTwitter\Services;
 
 use Exception;
-use MiniTwitter\Core\Response;
 use MiniTwitter\Models\Post;
 use MiniTwitter\Repositories\LikeRepository;
 use MiniTwitter\Repositories\PostRepository;
@@ -26,7 +25,7 @@ class PostService
     public function getTimeLine(?int $currentUserId): array
     {
         if (!$currentUserId) {
-            throw new Exception("Usuário não logado", 401);
+            throw new Exception("Sem permissão", 403);
         }
 
         $posts = $this->postRepository->findAll();
@@ -46,7 +45,7 @@ class PostService
     public function getOnePost(int $postId, ?int $currentUserId): Post
     {
         if(!$currentUserId) {
-            throw new Exception("Usuário não logado", 401);
+            throw new Exception("Sem permissão", 403);
         }
 
         if(!$postId) {
@@ -61,7 +60,7 @@ class PostService
         $content = trim($data['content']);
         
         if(!$currentUserId) {
-            throw new Exception("Usuário não logado", 401);
+            throw new Exception("Sem permissão", 403);
         }
 
         if(!$content) {
@@ -76,7 +75,7 @@ class PostService
     public function deletePost(int $postId, ?int $currentUserId): void
     {
         if(!$currentUserId) {
-            throw new Exception("Usuário não logado", 401);
+            throw new Exception("Sem permissão", 403);
         }
 
         if(!$postId) {
@@ -91,7 +90,7 @@ class PostService
         $content = $data['content'];
 
         if(!$currentUserId) {
-            throw new Exception("Usuário não logado", 401);
+            throw new Exception("Sem permissão", 403);
         }
 
         if(!$postId) {

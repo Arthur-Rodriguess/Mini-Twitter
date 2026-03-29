@@ -2,33 +2,38 @@
 
 namespace MiniTwitter\Core;
 
+use MiniTwitter\Middlewares\AuthMiddleware;
+
 class Router
 {
     private $routes = [];
 
-    public function get($uri, $action)
+    public function get($uri, $action, $middlewares = [])
     {
-        $this->addRoute('GET', $uri, $action);
+        $this->addRoute('GET', $uri, $action, $middlewares);
     }
 
-    public function post($uri, $action)
+    public function post($uri, $action, $middlewares = [])
     {
-        $this->addRoute('POST', $uri, $action);
+        $this->addRoute('POST', $uri, $action, $middlewares);
     }
 
-    public function put($uri, $action)
+    public function put($uri, $action, $middlewares = [])
     {
-        $this->addRoute('PUT', $uri, $action);
+        $this->addRoute('PUT', $uri, $action, $middlewares);
     }
 
-    public function delete($uri, $action)
+    public function delete($uri, $action, $middlewares = [])
     {
-        $this->addRoute('DELETE', $uri, $action);
+        $this->addRoute('DELETE', $uri, $action, $middlewares);
     }
 
-    private function addRoute(string $method, string $uri, string $action): void
+    private function addRoute(string $method, string $uri, string $action, array $middlewares = []): void
     {
-        $this->routes[$method][$uri] = $action;
+        $this->routes[$method][$uri] = [
+            'action' => $action,
+            'middlewares' => $middlewares
+        ];
     }
 
     public function run()
@@ -38,14 +43,19 @@ class Router
 
         $routes = $this->routes[$method] ?? [];
 
-        foreach ($routes as $routeUri => $action) {
+        foreach ($routes as $routeUri => $route) {
             // Transforma {id} em regex
             $pattern = preg_replace('#\{[^/]+\}#', '([^/]+)', $routeUri);
             
             $pattern = "#^" . rtrim($pattern, '/') . "$#";
 
             if (preg_match($pattern, $uri, $matches)) {
+                foreach ($route['middlewares'] as $middleware) {
+                    $instance = new $middleware();
+                    $instance->handle();
+                }
                 array_shift($matches);
+                $action = $route['action'];
                 [$controller, $methodAction] = explode('@', $action);
 
                 $controllerClass = "MiniTwitter\\Controllers\\$controller";
